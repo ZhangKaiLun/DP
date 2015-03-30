@@ -9,14 +9,23 @@
 #import "FirstViewController.h"
 #import "Button.h"
 #import "Method.h"
+#import "QiangGouCell.h"
+#import "QiangGouModel.h"
+#import "TuiJianCell.h"
+#import "TuiJianModel.h"
+#import "JieShaoCell.h"
+#import "JieShaoModel.h"
 
-@interface FirstViewController ()<UIScrollViewDelegate>
+
+@interface FirstViewController ()<UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) UIScrollView *topScrollView;//上部滚动视图
 
 @property (nonatomic, strong) UIPageControl *pageControl;
+
+@property (nonatomic, strong) NSMutableArray *likeDatas;//存放"猜你喜欢"数据
 
 
 @end
@@ -37,19 +46,107 @@
     
     self.view.backgroundColor = [UIColor clearColor];
     
-       //设置上部按钮的滚动视图
+//    设置上部盛放按钮的滚动视图
+    [self createTableView];
+    
+
+
+    
+//#pragma mark -- 绑定cellxib
+//    UINib *qianggouNib = [UINib nibWithNibName:@"GiangGouModel" bundle:nil];
+//    
+//    [_tableView registerNib:qianggouNib forCellReuseIdentifier:@"qianggou"];
+//    
+//    UINib *tuijianNib = [UINib nibWithNibName:@"TuiJianModel" bundle:nil];
+//    
+//    [_tableView registerNib:tuijianNib forCellReuseIdentifier:@"tuijian"];
+//    
+//    UINib *jieshaoNib = [UINib nibWithNibName:@"JieShaoModel" bundle:nil];
+//    
+//    [_tableView registerNib:jieshaoNib forCellReuseIdentifier:@"jieshao"];
+    
+}
+
+#pragma mark -- 设置tableView
+- (void)createTableView {
+    
+    _tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
+    
+    _tableView.backgroundColor = [UIColor lightGrayColor];
+    
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    
+    [self.view addSubview:_tableView];
+}
+
+#pragma mark -- UITableView的代理方法
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 3 + _likeDatas.count;
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 200;
+    
+}
+
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+ 
     [self createTopScrollView];
     
-   }
+    [_tableView.tableHeaderView addSubview:_topScrollView];
+    [_tableView.tableHeaderView addSubview:_pageControl];
+    
+    return _topScrollView;
+    
+}
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-//设置上部按钮的滚动视图
+#pragma mark -- 大牌抢购
+    //第一个cell
+    if(indexPath.row == 1) {
+        QiangGouCell *cell = [QiangGouCell cellWithTableView:tableView];
+        
+        return cell;
+    }
+    
+#pragma mark -- 推荐
+    //第二个cell
+    if(indexPath.row == 2) {
+        TuiJianCell *cell = [TuiJianCell cellWithTableView:tableView];
+        
+        return cell;
+    }
+    
+#pragma mark -- 猜你喜欢
+    //剩下的所有cell
+    JieShaoCell *cell = [JieShaoCell cellWithTableView:tableView];
+    
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row == 0) {
+        return 60;
+    } else if(indexPath.row == 1) {
+        return 140;
+    } else {
+        return 100;
+    }
+    
+}
+
+#pragma mark -- 设置上部按钮的滚动视图
 - (void)createTopScrollView {
     
     _topScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 180)];
     
     _topScrollView.backgroundColor = [UIColor whiteColor];
-    _topScrollView.contentSize = CGSizeMake(self.view.frame.size.width*5, 1);
+    _topScrollView.contentSize = CGSizeMake(self.view.frame.size.width*3, 1);
     //设置翻页模式
     _topScrollView.pagingEnabled = YES;
     //隐藏横向滚动条
@@ -59,7 +156,7 @@
     
     
     //翻页指示控件
-    _pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_topScrollView.frame)-20, self.view.frame.size.width, 20)];
+    _pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_topScrollView.frame), self.view.frame.size.width, 20)];
     //设置页数
     _pageControl.numberOfPages = 3;
     //普通状态时的颜色
@@ -71,20 +168,8 @@
     //向滚动视图添加按钮
     [self putButtonsToTopScrollView];
     
-    [_tableView addSubview:_topScrollView];
-    [_tableView addSubview:_pageControl];
-    
 }
 
-- (void)createTableView {
-    
-    _tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
-    
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    
-    [self.view addSubview:_tableView];
-}
 
 #pragma mark -- UIScrollView的代理方法
 
@@ -96,15 +181,19 @@
     //判断当前页数
     NSInteger num = point.x / self.view.frame.size.width;
     
-    if (num == 0 || num == 2+1) {
-        point.x = 2;
-//        _pageControl.currentPage = 0;
-    } else {
-        point.x = 1;
-//        _pageControl.currentPage = 1;
-    }
+//    if (num == -1) {
+//        point.x = 2;
+////        _pageControl.currentPage = 0;
+//    } else if(num == 2+1) {
+//        point.x = 0;
+//    } else {
+//        point.x = 1;
+////        _pageControl.currentPage = 1;
+//    }
+    
     _pageControl.currentPage = num;
-    _topScrollView.contentOffset = CGPointMake(point.x*self.view.frame.size.width, 0);
+    
+//    _topScrollView.contentOffset = CGPointMake(point.x*self.view.frame.size.width, 0);
 }
 
 //向上面的滚动视图添加按钮
@@ -139,7 +228,7 @@
     
     for (int j = 0; j < 3; j++) {
         
-        [_tableView addSubview:array[j]];
+        [_topScrollView addSubview:array[j]];
 
         
         for (int i = 0; i < titles1.count; i++) {

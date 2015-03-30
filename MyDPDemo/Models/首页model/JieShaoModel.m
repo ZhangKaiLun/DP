@@ -1,13 +1,13 @@
 //
-//  FirstCell.h
+//  JieShaoModel.m
 //  MyDPDemo
 //
 //  Created by Zkl on 15/3/29.
 //  Copyright (c) 2015年 Zkl. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "JieShaoModel.h"
 
-@interface FirstCell : UITableViewCell
+@implementation JieShaoModel
 
 @end

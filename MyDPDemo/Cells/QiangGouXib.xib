@@ -6,7 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="QiangGouXib" id="Kg1-lv-IfE" customClass="FirstCell">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="qianggou" id="Kg1-lv-IfE" customClass="QiangGouCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Kg1-lv-IfE" id="Gbc-km-ATn">
@@ -28,10 +28,10 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVp-hr-AKG">
-                        <rect key="frame" x="240" y="10" width="40" height="10"/>
+                        <rect key="frame" x="240" y="10" width="40" height="13"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NXo-Rn-aCU">
-                        <rect key="frame" x="287" y="20" width="20" height="20"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="pic_arrow.png" translatesAutoresizingMaskIntoConstraints="NO" id="NXo-Rn-aCU">
+                        <rect key="frame" x="290" y="25" width="10" height="10"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YRz-qp-hjq">
                         <rect key="frame" x="90" y="10" width="100" height="20"/>
@@ -42,10 +42,19 @@
                     </label>
                 </subviews>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="describeLabel" destination="F9l-ec-11h" id="YU8-Iz-oPV"/>
+                <outlet property="leftImage" destination="xwQ-oE-X0f" id="pzR-VV-3sR"/>
+                <outlet property="priceLabel" destination="BjU-Rt-5nE" id="KBj-oO-eZl"/>
+                <outlet property="rightImageView" destination="NXo-Rn-aCU" id="13o-k2-x3x"/>
+                <outlet property="titleLabel" destination="YRz-qp-hjq" id="y3d-j5-4w9"/>
+                <outlet property="topImageView" destination="eVp-hr-AKG" id="n2l-fR-7gG"/>
+            </connections>
             <point key="canvasLocation" x="217" y="288"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="brand_buy_logo.png" width="62" height="62"/>
+        <image name="pic_arrow.png" width="9" height="13"/>
     </resources>
 </document>
