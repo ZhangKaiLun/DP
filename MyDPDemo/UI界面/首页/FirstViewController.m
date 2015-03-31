@@ -46,10 +46,9 @@
     
     self.view.backgroundColor = [UIColor clearColor];
     
-//    设置上部盛放按钮的滚动视图
+//    设置tableView
     [self createTableView];
     
-
 
     
 //#pragma mark -- 绑定cellxib
@@ -87,53 +86,65 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 200;
+    return 220;
     
 }
 
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
  
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0)];
+//    view.backgroundColor = [UIColor grayColor];
+    
+    _tableView.tableHeaderView = view;
+    
     [self createTopScrollView];
     
-    [_tableView.tableHeaderView addSubview:_topScrollView];
-    [_tableView.tableHeaderView addSubview:_pageControl];
+    [view addSubview:_topScrollView];
+    [view addSubview:_pageControl];
     
-    return _topScrollView;
+    return view;
     
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    
+    UITableViewCell *cell = nil;
+    
 #pragma mark -- 大牌抢购
     //第一个cell
-    if(indexPath.row == 1) {
-        QiangGouCell *cell = [QiangGouCell cellWithTableView:tableView];
+    if(indexPath.row == 0) {
+        QiangGouCell *cell1 = [QiangGouCell cellWithTableView:tableView];
+        cell = cell1;
         
-        return cell;
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 60, self.view.frame.size.width, 20)];
+        
+        view.backgroundColor = [UIColor lightGrayColor];
+        
+        [cell.contentView addSubview:view];
+        
+    } else if (indexPath.row == 1){
+    
+        TuiJianCell *cell2 = [TuiJianCell cellWithTableView:tableView];
+        cell2.backgroundColor = [UIColor lightGrayColor];
+        cell = cell2;
+    
+    } else {
+        JieShaoCell *cell3 = [JieShaoCell cellWithTableView:tableView];
+        
+        cell =cell3;
+        
     }
     
-#pragma mark -- 推荐
-    //第二个cell
-    if(indexPath.row == 2) {
-        TuiJianCell *cell = [TuiJianCell cellWithTableView:tableView];
-        
-        return cell;
-    }
-    
-#pragma mark -- 猜你喜欢
-    //剩下的所有cell
-    JieShaoCell *cell = [JieShaoCell cellWithTableView:tableView];
-    
-    return cell;
+      return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.row == 0) {
-        return 60;
+        return 80;
     } else if(indexPath.row == 1) {
-        return 140;
+        return 160;
     } else {
         return 100;
     }
@@ -163,7 +174,7 @@
     _pageControl.pageIndicatorTintColor = [UIColor grayColor];
     //选中状态时的颜色
     _pageControl.currentPageIndicatorTintColor = [UIColor orangeColor];
-    
+    _pageControl.backgroundColor = [UIColor whiteColor];
     
     //向滚动视图添加按钮
     [self putButtonsToTopScrollView];
